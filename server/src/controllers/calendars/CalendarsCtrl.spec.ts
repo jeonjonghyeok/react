@@ -6,7 +6,7 @@ import { Calendar } from "../../models/Calendar";
 import { CalendarsService } from "../../services/calendars/CalendarsService";
 import { MemoryStorage } from "../../services/storage/MemoryStorage";
 import { CalendarsCtrl } from "./CalendarsCtrl";
-import EmployeeRepository from "./../../repositories/EmployeeRepository";
+import EmployeeRepository from "../../repositories/EmployeeRepository";
 import { TypeORMService } from "@tsed/typeorm";
 
 describe("CalendarCtrl", () => {

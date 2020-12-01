@@ -2,7 +2,7 @@ import {PlatformTest} from "@tsed/common";
 import {TypeORMService} from "@tsed/typeorm";
 import {expect} from "chai";
 import {MemoryStorage} from "../storage/MemoryStorage";
-import EmployeeRepository from "./../../repositories/EmployeeRepository";
+import EmployeeRepository from "../../repositories/EmployeeRepository";
 import {CalendarsService} from "./CalendarsService";
 
 describe("CalendarsService", () => {

@@ -1,14 +1,17 @@
 import {Configuration, Inject, PlatformApplication} from "@tsed/common";
+import "@tsed/mongoose"; // import mongoose ts.ed module
 import "@tsed/platform-express";
 import "@tsed/swagger";
 import "@tsed/typeorm";
+import "@tsed/passport";
+import * as session from "express-session";
 import * as bodyParser from "body-parser";
 import * as compress from "compression";
 import * as cookieParser from "cookie-parser";
 import * as methodOverride from "method-override";
 import * as path from "path";
 import "reflect-metadata";
-
+import mongooseConfig from "./config/mongoose";
 const rootDir = __dirname;
 const clientDir = path.join(rootDir, "../../client/build");
 
@@ -17,6 +20,7 @@ const clientDir = path.join(rootDir, "../../client/build");
   acceptMimes: ["application/json"],
   httpPort: process.env.PORT || 8081,
   httpsPort: false,
+  mongoose: mongooseConfig,
   logger: {
     debug: true,
     logRequest: false,
@@ -38,7 +42,8 @@ const clientDir = path.join(rootDir, "../../client/build");
   componentsScan: [
     "${rootDir}/middlewares/**/*.ts",
     "${rootDir}/services/**/*.ts",
-    "${rootDir}/repositories/**/*.ts"
+    "${rootDir}/repositories/**/*.ts",
+    "${rootDir}/protocols/**/*.ts"
   ],
   swagger: [
     {
@@ -78,6 +83,8 @@ export class Server {
   @Inject()
   app: PlatformApplication;
 
+  @Configuration()
+  settings: Configuration;
   /**
    * This method let you configure the middleware required by your application to works.
    * @returns {Server}
@@ -92,7 +99,18 @@ export class Server {
         bodyParser.urlencoded({
           extended: true
         })
-      );
+      )
+      .use(session({
+        secret: "mysecretkey",
+        resave: true,
+        saveUninitialized: true,
+        maxAge: 36000,
+        cookie: {
+          path: "/",
+          httpOnly: true,
+          secure: false
+        }
+      }));
 
     return null;
   }
